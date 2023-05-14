@@ -1,0 +1,60 @@
+Router(config)# hostname R1
+
+R1(config)# no ip domain-lookup
+
+R1(config)# security passwords min-length 10
+
+R1(config)# enable secret cisco12345
+
+R1(config)# line con 0
+R1(config-line)# password ciscoconpass
+R1(config-line)# exec-timeout 5 0
+R1(config-line)# login
+R1(config-line)# logging synchronous
+R1(config-line)# exit
+R1(config)#
+
+R1(config)# line vty 0 4
+R1(config-line)# password ciscovtypass
+R1(config-line)# exec-timeout 5 0
+R1(config-line)# login
+R1(config-line)# logging synchronous
+R1(config-line)# exit
+R1(config)#
+
+R1(config)# service password-encryption
+
+
+R1(config)# banner motd #Unauthorized access prohibited!#
+
+R1(config)# int g0/0
+R1(config-if)# description Connection to PC-B
+R1(config-if)# ip address 192.168.0.1 255.255.255.0
+R1(config-if)# no shutdown
+R1(config-if)# int g0/1
+R1(config-if)# description Connection to S1
+R1(config-if)# ip address 192.168.1.1 255.255.255.0
+R1(config-if)# no shutdown
+R1(config-if)# exit
+R1(config)# exit
+R1#
+
+R1# clock set 17:00:00 18 Feb 2013
+
+
+R1# copy running-config startup-config
+
+telnet 192.168.1.1
+
+R1# configure terminal
+R1(config)# ip domain-name CCNA-lab.com
+R1(config)# username admin privilege 15 secret adminpass1
+R1(config)# line vty 0 4
+R1(config-line)# transport input ssh
+R1(config-line)# login local
+R1(config-line)# exit
+R1(config)# crypto key generate rsa general-keys modulus 1024
+R1(config)# exit
+
+
+SSH -l admin 192.168.0.1

@@ -1,0 +1,43 @@
+Switch#show running-config
+
+Switch#configure terminal
+
+Switch(config)#hostname ALSwitch
+ALSwitch(config)#exit
+
+ALSwitch#configure terminal
+
+
+ALSwitch(config)#line con 0
+ALSwitch(config-line)#password cisco
+ALSwitch(config-line)#login
+ALSwitch(config-line)#line vty 0 15
+ALSwitch(config-line)#password cisco
+ALSwitch(config-line)#login
+ALSwitch(config-line)#exit
+
+
+ALSwitch(config)#enable password cisco
+ALSwitch(config)#enable secret class
+
+ALSwitch(config)#interface VLAN 1
+ALSwitch(config-if)#ip address 192.168.1.2 255.255.255.0
+ALSwitch(config-if)#exit
+
+ALSwitch(config)#ip default-gateway 192.168.1.1
+ALSwitch(config)#exit
+
+
+ALSwitch#show interface VLAN 1
+
+ALSwitch(config)#interface VLAN 1
+ALSwitch(config-if)#no shutdown
+ALSwitch(config-if)#exit
+
+ALSwitch#copy running-config startup-config
+
+ALSwitch#exit
+
+Switch#delete flash:vlan.dat
+
+Switch#erase startup-config
